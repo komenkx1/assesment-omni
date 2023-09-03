@@ -9,7 +9,7 @@
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                         Create Account
                     </h1>
-                    <form class="space-y-4 md:space-y-6" @submit.prevent="login">
+                    <form class="space-y-4 md:space-y-6" @submit.prevent="register">
                         <div>
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Your name</label>
                             <input type="text" v-model="name" name="name" id="name" placeholder="Your Name"
@@ -36,7 +36,7 @@
                         </div>
                         <div>
                             <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password Confirmation</label>
-                            <input v-model="password" type="password" name="password" id="password" placeholder="••••••••"
+                            <input v-model="password" type="password" name="password confirmation" id="password" placeholder="••••••••"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-brand-500 focus:outline-none focus:border-brand-500 block w-full p-2.5"
                                 required>
                         </div>
@@ -50,8 +50,7 @@
 
                         </div>
                         <button type="submit"
-                            class="w-full text-black bg-primary-600 hover:bg-primary-700 focus:ring-4 border border-lg border-gray-300 focus:ring-brand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign
-                            in</button>
+                            class="w-full text-black bg-primary-600 hover:bg-primary-700 focus:ring-4 border border-lg border-gray-300 focus:ring-brand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign Up</button>
 
                     </form>
                 </div>
@@ -66,17 +65,21 @@ export default {
         return {
             email: '',
             password: '',
+            name: '',
+            phone: '',
             errors: [],
         }
     },
     methods: {
-        login() {
-            axios.post('/api/login', {
+        register() {
+            axios.post('/api/register', {
                 email: this.email,
-                password: this.password
+                password: this.password,
+                name: this.name,
+                telepon: this.phone,
+
             }).then(response => {
-                this.$store.dispatch('login', response.data)
-                window.location.href = '/'
+                this.$router.push('/login')
             }).catch(error => {
                 this.errors = error.response.data.errors
             })

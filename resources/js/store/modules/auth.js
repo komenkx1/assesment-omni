@@ -3,7 +3,7 @@ const state = {
 }
 
 const mutations = {
-	['SET_USER'](state, data) {
+	['SET_AUTH_USER'](state, data) {
 		state.user = data
 	},
  
@@ -11,11 +11,11 @@ const mutations = {
 
 const actions = {
   getUser ({ getters },id) {
-    return axios.get('/api/user/'+id)
+    return axios.get('/api/get-auth-user/')
   },
   login ({ commit }, data) {
+    commit('SET_AUTH_USER', data.data)
     localStorage.setItem('token', data.access_token)
-    commit('SET_USER', data.user)
   },
   signOut({ commit }) {
     return axios.post('/api/logout/')

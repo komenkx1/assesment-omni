@@ -111,7 +111,6 @@ export default {
     loadAuth() {
       const user = this.$store.state.auth.user
       this.user = user
-      console.log(this.user)
     },
 
     async signOut() {
@@ -120,7 +119,6 @@ export default {
         localStorage.clear()
         sessionStorage.clear()
         window.location.href = '/login'
-          
         })
         .catch(() => {
           this.loading = false

@@ -21,8 +21,10 @@ Route::post('/register', [AuthController::class, 'register']);
 
 //verifyEmail
 Route::get('/email/verify/{user:id}', [AuthController::class, 'verifyEmail'])->name('verification.verify');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('user', UserController::class);
-Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/get-auth-user', [AuthController::class, 'getUser']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 
 });

@@ -12,12 +12,29 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
+    public function getUser()
+    {
+        $auth = Auth::user();
+
+        if (!auth()) {
+            return response()->json([
+                "data" => null,
+                "status" => false
+            ], 401);
+        }
+        
+        return response()->json([
+            "data" => $auth,
+            "status" => true
+        ]);
+    }
+
     public function register(Request $request)
     {
         $userController = new UserController();
         $data = $userController->store($request);
         $data = $data->original;
-        if($data['status'] == true){
+        if ($data['status'] == true) {
             $user = $data['data'];
             SendVerifyEmail::dispatch($user->id, false);
         }

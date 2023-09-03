@@ -25,7 +25,6 @@
     </div>
   </template>
 
-  <vue-progress-bar />
 </template>
 
 <script>
@@ -64,7 +63,6 @@ export default {
 
         // Set header Authorization dengan token bearer
         if (token) {
-          console.log('token', token)
           config.headers.Authorization = `Bearer ${token}`;
         }
 
@@ -84,7 +82,7 @@ export default {
       try {
         const resUser = await this.$store.dispatch('getUser',1)
         if (resUser.data.status) {
-          this.$store.commit('SET_USER', resUser.data.data)
+          this.$store.commit('SET_AUTH_USER', resUser.data.data)
         } else {
           alert(resUser.data.message)
         }
@@ -92,7 +90,7 @@ export default {
         const { statusCode, message } = this.$helpers.errorHandlingAxios(error)
         if (statusCode === 401) {
           //empty state user
-          this.$store.commit('SET_USER', {})
+          this.$store.commit('SET_AUTH_USER', {})
           localStorage.clear()
           sessionStorage.clear()
           this.$router.push('/login')
