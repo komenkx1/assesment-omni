@@ -28,14 +28,14 @@
             <RouterLink v-if="m.children.length === 0" :to="m.link" class="
                 sidebar-menu
               ">
-              <span :class="`${m.icon} mr-2 text-brand-500`"></span>
+              <component :is="m.icon" v-if="!loading" :class="'w-5 h-5'" />
               {{ m.text }}
             </RouterLink>
             <button v-else :class="`
                 sidebar-menu relative w-full text-left
                 ${childOpen.includes(m.id) ? 'bg-gray-100 dark:bg-gray-900' : ''}
               `" @click="toggleChild(m.id)">
-              <span :class="`${m.icon} mr-2 text-brand-500`"></span>
+              <component :is="m.icon" v-if="!loading" :class="'w-5 h-5'" />
               {{ m.text }}
               <ChevronUpIcon :class="`
                   absolute right-4 top-4
@@ -66,19 +66,19 @@
             <RouterLink v-if="m.children.length === 0" :to="m.link" class="
                 sidebar-menu
               ">
-              <span :class="`${m.icon} mr-2 text-brand-500`"></span>
               {{ m.text }}
             </RouterLink>
 
             <span v-else class="block uppercase px-2 pt-4 pb-2 font-bold text-brand-600">
+
               {{ m.text }}
             </span>
 
             <template v-for="m2 in m.children" :key="m2.id">
               <RouterLink :class="`
-                  sidebar-menu relative w-full text-left
+                  sidebar-menu relative w-full text-left flex gap-2 items-center
                 `" :to="m2.link">
-                <span :class="`${m2.icon} mr-2 text-brand-500`"></span>
+                <component :is="m2.icon" v-if="!loading" :class="'w-5 h-5'" />
                 {{ m2.text }}
               </RouterLink>
             </template>
@@ -104,11 +104,11 @@
   </div>
 </template>
 <script>
-import { ChevronUpIcon } from '@heroicons/vue/24/outline'
+import { ChevronUpIcon, UserCircleIcon, DocumentIcon } from '@heroicons/vue/24/outline'
 
 export default {
   components: {
-    ChevronUpIcon
+    ChevronUpIcon, UserCircleIcon, DocumentIcon
   },
   computed: {
     menu() {
@@ -117,19 +117,19 @@ export default {
         {
           id: 1,
           text: 'Dashboard',
-          icon: 'HomeIcon',
+          icon: 'ChevronUpIcon',
           link: '',
           children: [
             {
               id: 1,
               text: 'Manajemen User',
-              icon: 'DocumentReportIcon',
+              icon: 'UserCircleIcon',
               link: '/',
             },
             {
               id: 2,
               text: 'Log',
-              icon: 'DocumentReportIcon',
+              icon: 'DocumentIcon',
               link: '/log',
             },
           ]
