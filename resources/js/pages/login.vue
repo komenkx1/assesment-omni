@@ -53,10 +53,25 @@ export default {
             toast: useToast()
         }
     },
+    created() {
+    console.log(this.$route.query.data);
+    },
+    mounted() {
+        this.loadSession();
+    },
     methods: {
+        loadSession: function () {
+            axios.get('api/session')
+                .then((response) => {
+                    this.session = response.data;
+                    console.log(this.session)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         login() {
-            //validate form
-            if(!this.validateForm()){
+            if (!this.validateForm()) {
                 return this.toast.error('Please fill all required fields')
             }
             axios.post('/api/login', {
@@ -71,15 +86,15 @@ export default {
             })
         },
 
-        validateForm(){
+        validateForm() {
             this.errors = []
-            if(!this.email){
+            if (!this.email) {
                 this.errors.push('Email is required')
             }
-            if(!this.password){
+            if (!this.password) {
                 this.errors.push('Password is required')
             }
-            if(this.errors.length > 0){
+            if (this.errors.length > 0) {
                 return false
             }
             return true

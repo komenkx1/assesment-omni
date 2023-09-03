@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\VerifEmailEvent;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendVerifyEmail;
+use App\Mail\VerifyEmail;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
@@ -94,7 +96,7 @@ class AuthController extends Controller
         }
 
         if ($user->hasVerifiedEmail()) {
-            return redirect('/login')->with('info', 'Email sudah terverifikasi sebelumnya.');
+            return view('success-alert-verify', ['status' => 'info', 'message' => 'Email Sudah Terverifikasi.']);
         }
 
         if ($user->markEmailAsVerified()) {
@@ -103,9 +105,10 @@ class AuthController extends Controller
                 ->causedBy($user)
                 ->event('UPDATE')
                 ->log('verify email');
-            return redirect('/login')->with('success', 'Email berhasil diverifikasi.');
+            //send data to vueJS to save to local storage
+            return view('success-alert-verify', ['status' => 'success', 'message' => 'Berhasil verifikasi email.']);
         }
 
-        return redirect('/login')->with('error', 'Gagal verifikasi email.');
+        return view('success-alert-verify', ['status' => 'error', 'message' => 'Gagal verifikasi email.']);
     }
 }

@@ -69,6 +69,7 @@ export default {
         return config;
       },
       (error) => {
+        console.log(error)
         return Promise.reject(error);
       }
     );
@@ -77,6 +78,7 @@ export default {
     this.loadUser()
   },
   methods: {
+
     async loadUser() {
       this.ready = false
       try {

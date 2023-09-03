@@ -22,12 +22,15 @@ Route::post('/register', [AuthController::class, 'register']);
 
 //verifyEmail
 Route::get('/email/verify/{user:id}', [AuthController::class, 'verifyEmail'])->name('verification.verify');
-
+Route::get('session', function () {
+    return [
+        'user_id' => session()->get('sdaas'),
+    ];
+});
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('user', UserController::class);
     Route::post('user/batch-insert', [UserController::class, 'batchInsert']);
     Route::get('/get-auth-user', [AuthController::class, 'getUser']);
     Route::get('/get-log', [LogController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
-
 });
