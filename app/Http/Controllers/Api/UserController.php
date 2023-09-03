@@ -8,6 +8,7 @@ use App\Jobs\SendBatchVerifyEmail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -17,6 +18,10 @@ class UserController extends Controller
     public function index()
     {
         $userData = User::all();
+        activity()
+            ->causedBy(Auth::user())
+            ->event('READ')
+            ->log('get all data user');
         return $this->responseMessage($userData, true);
     }
 
@@ -31,6 +36,10 @@ class UserController extends Controller
             'telepon' => $request->telepon,
             'password' => bcrypt($request->password),
         ]);
+        activity()
+            ->causedBy(Auth::user())
+            ->event('CREATE')
+            ->log('create new data user');
         return $this->responseMessage($userData, true);
     }
 
@@ -39,6 +48,10 @@ class UserController extends Controller
         $data = $request->json('data');
         InsertMassUser::dispatch($data);
         SendBatchVerifyEmail::dispatch();
+        activity()
+            ->causedBy(Auth::user())
+            ->event('CREATE')
+            ->log('create new data user');
         return $this->responseMessage([], true, 'Data Sedang Dimasukan');
     }
 
@@ -48,6 +61,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->event('READ')
+            ->performedOn($user)
+            ->log('get data user');
         return $this->responseMessage($user, true);
     }
 
@@ -62,6 +80,12 @@ class UserController extends Controller
             'telepon' => $request->telepon,
             'password' => bcrypt($request->password),
         ]);
+
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($user)
+            ->event('UPDATE')
+            ->log('update data user');
         return $this->responseMessage($userData, true);
     }
 
@@ -71,6 +95,12 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $userData = $user->delete();
+
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($user)
+            ->event('DELETE')
+            ->log('delete data user');
         return $this->responseMessage($userData, true);
     }
 }

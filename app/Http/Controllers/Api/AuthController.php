@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class AuthController extends Controller
 {
@@ -22,7 +23,6 @@ class AuthController extends Controller
                 "status" => false
             ], 401);
         }
-        
         return response()->json([
             "data" => $auth,
             "status" => true
@@ -38,12 +38,15 @@ class AuthController extends Controller
             $user = $data['data'];
             SendVerifyEmail::dispatch($user->id);
         }
+        activity()->performedOn($user)
+            ->causedBy($user)
+            ->event('CREATE')
+            ->log('register new account');
         return $data;
     }
 
     public function login(Request $request)
     {
-        //validate the incoming request
         $credentials = request()->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -55,6 +58,12 @@ class AuthController extends Controller
         }
         $user = User::find(Auth::user()->id);
         $token = $user->createToken('auth');
+
+        activity()->performedOn($user)
+            ->causedBy($user)
+            ->event('READ')
+            ->log('login');
+
         return response()->json([
             'access_token' => $token->plainTextToken,
             'token_type' => 'bearer',
@@ -67,6 +76,10 @@ class AuthController extends Controller
     {
         $user = User::find(Auth::user()->id);
         $user->tokens()->delete();
+        activity()->performedOn($user)
+            ->causedBy($user)
+            ->event('UPDATE')
+            ->log('logout');
         return response()->json([
             'message' => 'Logged out',
             'status' => true,
@@ -78,18 +91,22 @@ class AuthController extends Controller
         $user = User::find($user_id);
 
         if (!$user) {
-            return redirect()->route('login')->with('error', 'User tidak ditemukan.');
+            return redirect('/login')->with('error', 'User tidak ditemukan.');
         }
 
         if ($user->hasVerifiedEmail()) {
-            return redirect()->route('login')->with('info', 'Email sudah terverifikasi sebelumnya.');
+            return redirect('/login')->with('info', 'Email sudah terverifikasi sebelumnya.');
         }
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
-            return redirect()->route('login')->with('success', 'Email berhasil diverifikasi.');
+            activity()->performedOn($user)
+                ->causedBy($user)
+                ->event('UPDATE')
+                ->log('verify email');
+            return redirect('/login')->with('success', 'Email berhasil diverifikasi.');
         }
 
-        return redirect()->route('login')->with('error', 'Gagal verifikasi email.');
+        return redirect('/login')->with('error', 'Gagal verifikasi email.');
     }
 }
