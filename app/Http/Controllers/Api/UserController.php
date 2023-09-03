@@ -60,7 +60,7 @@ class UserController extends Controller
         activity()
             ->causedBy(Auth::user())
             ->event('CREATE')
-            ->log('create new data user');
+            ->log('create new data user batch');
         return $this->responseMessage([], true, 'Data Sedang Dimasukan');
     }
 
