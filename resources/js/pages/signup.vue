@@ -18,7 +18,7 @@
                         </div>
                         <div>
                             <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">Your phone</label>
-                            <input type="text" v-model="phone" phone="phone" id="phone" placeholder="Your phone"
+                            <input type="number" v-model="phone" phone="phone" id="phone" placeholder="Your phone"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-brand-500 focus:outline-none focus:border-brand-500 block w-full p-2.5"
                                 required>
                         </div>
@@ -35,10 +35,13 @@
                                 required>
                         </div>
                         <div>
-                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password Confirmation</label>
-                            <input v-model="password" type="password" name="password confirmation" id="password" placeholder="••••••••"
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password
+                                Confirmation</label>
+                            <input v-model="password_confirmation" type="password" name="password confirmation"
+                                id="password-confirm" placeholder="••••••••"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-brand-500 focus:outline-none focus:border-brand-500 block w-full p-2.5"
                                 required>
+                            <p v-if="!isPasswordMatch" class="text-sm text-red-500 mt-2">Password confirmation does not match</p>
                         </div>
                         <div class="flex items-center justify-between">
 
@@ -46,11 +49,13 @@
                                 Already have an Account?
 
                             </p>
-                            <button @click="() => $router.push('/login')"  type="button" class="font-medium text-primary-600 hover:underline">Log In</button>
+                            <button @click="() => $router.push('/login')" type="button"
+                                class="font-medium text-primary-600 hover:underline">Log In</button>
 
                         </div>
                         <button type="submit"
-                            class="w-full text-black bg-primary-600 hover:bg-primary-700 focus:ring-4 border border-lg border-gray-300 focus:ring-brand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign Up</button>
+                            class="w-full text-black bg-primary-600 hover:bg-primary-700 focus:ring-4 border border-lg border-gray-300 focus:ring-brand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign
+                            Up</button>
 
                     </form>
                 </div>
@@ -60,18 +65,30 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification'
 export default {
     data() {
         return {
+            toast: useToast(),
             email: '',
             password: '',
+            password_confirmation: '',
             name: '',
             phone: '',
             errors: [],
         }
     },
+   computed: {
+        isPasswordMatch() {
+            return this.password === this.password_confirmation
+        }
+    },
     methods: {
         register() {
+            //validate
+            if(!this.validateForm()){
+                return this.toast.error('Please fill all required fields')
+            }
             axios.post('/api/register', {
                 email: this.email,
                 password: this.password,
@@ -83,6 +100,25 @@ export default {
             }).catch(error => {
                 this.errors = error.response.data.errors
             })
+        },
+        validateForm(){
+            this.errors = []
+            if(!this.email){
+                this.errors.push('Email is required')
+            }
+            if(!this.password){
+                this.errors.push('Password is required')
+            }
+            if(!this.name){
+                this.errors.push('Name is required')
+            }
+            if(!this.phone){
+                this.errors.push('Phone is required')
+            }
+            if(this.errors.length > 0){
+                return false
+            }
+            return true
         }
     }
 }

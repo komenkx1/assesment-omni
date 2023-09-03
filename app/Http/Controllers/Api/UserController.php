@@ -30,6 +30,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'telepon' => 'required|unique:users,telepon',
+            'password' => 'required|min:6',
+        ]);
+
         $userData = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -74,6 +81,13 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $user->id, //ignore email user yang sedang login
+            'telepon' => 'required|unique:users,telepon,' . $user->id, //ignore telepon user yang sedang login
+            'password' => 'required|min:6',
+        ]);
+
         $userData = $user->update([
             'name' => $request->name,
             'email' => $request->email,
