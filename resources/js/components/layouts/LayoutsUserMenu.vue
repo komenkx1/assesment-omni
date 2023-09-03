@@ -39,18 +39,6 @@
 
         </div>
 
-        <!-- menu -->
-        <div class="px-1 py-1">
-          <MenuItem v-slot="{ active }">
-          <a :href="`profile`" :class="[
-            active ? 'text-brand-500 dark:text-brand-300' : 'text-gray-900 dark:text-gray-300',
-            'group flex w-full items-center rounded-md px-8 py-4 text-xs font-medium',
-          ]">
-            <Cog6ToothIcon :active="active" class="mr-2 h-5 w-5 text-brand-500 dark:text-brand-300" aria-hidden="true" />
-            Account Setting
-          </a>
-          </MenuItem>
-        </div>
         <div class="px-1 py-1">
           <MenuItem v-slot="{ active }">
           <button @click="signOut" :class="[
