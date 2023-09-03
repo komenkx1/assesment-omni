@@ -28,7 +28,8 @@
                                 Dont have an account yet?
 
                             </p>
-                            <button @click="() => $router.push('/register')"  type="button" class="font-medium text-primary-600 hover:underline">Sign up</button>
+                            <button @click="() => $router.push('/register')" type="button"
+                                class="font-medium text-primary-600 hover:underline">Sign up</button>
                         </div>
                         <button type="submit"
                             class="w-full text-black bg-primary-600 hover:bg-primary-700 focus:ring-4 border border-lg border-gray-300 focus:ring-brand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign
@@ -42,16 +43,22 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification'
 export default {
     data() {
         return {
             email: '',
             password: '',
             errors: [],
+            toast: useToast()
         }
     },
     methods: {
         login() {
+            //validate form
+            if(!this.validateForm()){
+                return this.toast.error('Please fill all required fields')
+            }
             axios.post('/api/login', {
                 email: this.email,
                 password: this.password
@@ -59,8 +66,23 @@ export default {
                 this.$store.dispatch('login', response.data)
                 window.location.href = '/'
             }).catch(error => {
+                this.toast.error(error.response.data.message)
                 this.errors = error.response.data.errors
             })
+        },
+
+        validateForm(){
+            this.errors = []
+            if(!this.email){
+                this.errors.push('Email is required')
+            }
+            if(!this.password){
+                this.errors.push('Password is required')
+            }
+            if(this.errors.length > 0){
+                return false
+            }
+            return true
         }
     }
 }

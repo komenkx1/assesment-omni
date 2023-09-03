@@ -52,7 +52,6 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        //check if email and password matches
         if (!auth()->attempt($credentials)) {
             return $this->responseMessage([], false, 'Invalid credentials');
         }
