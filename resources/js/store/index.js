@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 
 import main from './modules/main'
 import auth from './modules/auth'
+import user from './modules/user'
 
 const state = {
   state: {},
@@ -9,7 +10,8 @@ const state = {
   action: {},
   modules: {
     main,
-    auth
+    auth,
+    user
   }
 }
 

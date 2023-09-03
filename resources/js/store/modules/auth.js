@@ -10,9 +10,6 @@ const mutations = {
 }
 
 const actions = {
-  fetchUser ({ getters }) {
-    return axios.get('/api/user')
-  },
   getUser ({ getters },id) {
     return axios.get('/api/user/'+id)
   },
