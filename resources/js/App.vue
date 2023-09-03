@@ -65,11 +65,29 @@ export default {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
-
+        console.log(config)
         return config;
       },
       (error) => {
         console.log(error)
+        return Promise.reject(error);
+      }
+    );
+    //cek jika tiap call api ada error 401, maka akan diarahkan ke halaman login
+    axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        const { statusCode, message } = this.$helpers.errorHandlingAxios(error)
+        if (statusCode === 401) {
+          //empty state user
+          this.$store.commit('SET_AUTH_USER', {})
+          localStorage.clear()
+          sessionStorage.clear()
+          this.toast.error(message)
+          this.$router.push('/login')
+        }
         return Promise.reject(error);
       }
     );

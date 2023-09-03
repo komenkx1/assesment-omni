@@ -5,9 +5,9 @@ const errorHandlingAxios = (err) => {
     if ('response' in err && 'status' in err.response) {
       statusCode = err.response.status
       if (err.response.status === 401) {
-        message = 'Sesi telah habis'
+        message = 'unauthenticated'
       } else if (err.response.status === 404) {
-        message = 'Data tidak ditemukan'
+        message = 'not found'
       } else if (err.response.status === 0) {
         message = 'Tidak ada data'
       }

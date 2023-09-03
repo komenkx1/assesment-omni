@@ -16,7 +16,7 @@
       `">
       <!-- logo -->
       <div class="py-4 px-8 border-b dark:border-gray-700">
-        <RouterLink to="/spa/home" class="">
+        <RouterLink to="/" class="">
           <h3 class="font-bold text-lg text-center text-brand-600">Admin Panel User</h3>
         </RouterLink>
       </div>
@@ -150,7 +150,8 @@ export default {
   },
   data() {
     return {
-      childOpen: []
+      childOpen: [],
+      loading: false
     }
   },
   watch: {
