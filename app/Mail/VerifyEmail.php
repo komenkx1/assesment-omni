@@ -20,17 +20,12 @@ class VerifyEmail extends Mailable
     public function __construct($user)
     {
         $this->user = $user;
-        $this->verifyUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            ['user' => $this->user->id]
-        );
     }
 
     public function build()
     {
         return $this->view('mail.verify-email')
             ->subject('Verifikasi Email') 
-            ->with(['user' => $this->user, 'verifyUrl' => $this->verifyUrl]); // Data yang akan dipass ke template
+            ->with(['user' => $this->user]); // Data yang akan dipass ke template
     }
 }
