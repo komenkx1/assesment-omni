@@ -54,22 +54,10 @@ export default {
         }
     },
     created() {
-    console.log(this.$route.query.data);
     },
     mounted() {
-        this.loadSession();
     },
     methods: {
-        loadSession: function () {
-            axios.get('api/session')
-                .then((response) => {
-                    this.session = response.data;
-                    console.log(this.session)
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
         login() {
             if (!this.validateForm()) {
                 return this.toast.error('Please fill all required fields')
