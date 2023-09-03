@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\InsertMassUser;
+use App\Jobs\SendBatchVerifyEmail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -30,6 +33,15 @@ class UserController extends Controller
         ]);
         return $this->responseMessage($userData, true);
     }
+
+    public function batchInsert(Request $request)
+    {
+        $data = $request->json('data');
+        InsertMassUser::dispatch($data);
+        SendBatchVerifyEmail::dispatch();
+        return $this->responseMessage([], true, 'Data Sedang Dimasukan');
+    }
+
 
     /**
      * Display the specified resource.

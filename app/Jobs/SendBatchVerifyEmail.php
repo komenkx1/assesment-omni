@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\VerifyEmail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,21 +13,20 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendVerifyEmail implements ShouldQueue
+class SendBatchVerifyEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $newUserId;
 
-    public function __construct($newUserId)
+    public function __construct()
     {
-        $this->newUserId = $newUserId;
     }
 
-    public function handle()
+    public function handle(): void
     {
-        $user = User::find($this->newUserId);
-        if ($user) {
+        $today = Carbon::today();
+        $users = User::where('email_verified_at', null)->whereDate('created_at', $today)->get();
+        foreach ($users as $user) {
             Mail::to($user->email)->send(new VerifyEmail($user));
         }
     }

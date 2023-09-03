@@ -36,7 +36,7 @@ class AuthController extends Controller
         $data = $data->original;
         if ($data['status'] == true) {
             $user = $data['data'];
-            SendVerifyEmail::dispatch($user->id, false);
+            SendVerifyEmail::dispatch($user->id);
         }
         return $data;
     }

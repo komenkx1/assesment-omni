@@ -24,6 +24,7 @@ Route::get('/email/verify/{user:id}', [AuthController::class, 'verifyEmail'])->n
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('user', UserController::class);
+    Route::post('user/batch-insert', [UserController::class, 'batchInsert']);
     Route::get('/get-auth-user', [AuthController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
