@@ -35,7 +35,7 @@
                     </div>
                     <div class="input my-2">
                         <label for="phone">Phone</label>
-                        <input v-model="modalForm.telepon" required type="text" class="t-form" placeholder="0829898398">
+                        <input v-model="modalForm.telepon" required type="number" class="t-form" placeholder="0829898398">
                     </div>
                     <div class="input my-2">
                         <label for="email">Email</label>
@@ -51,6 +51,9 @@
                         <label for="password">Confirmation Password</label>
                         <input v-model="modalForm.password_confirmation" required type="password" class="t-form"
                             placeholder="Input Confirmation Password">
+                        <p v-if="!isPasswordMatch" class="text-sm text-red-500 mt-2">Password confirmation does not match
+                        </p>
+
                     </div>
                     <hr class="my-3">
                     <div class="flex justify-end">
@@ -66,6 +69,7 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification';
 import BtnIcon from '../components/global/BtnIcon.vue';
 import BtnWithIcon from '../components/global/BtnWithIcon.vue';
 import ModalComp from '../components/global/ModalComp.vue';
@@ -79,6 +83,7 @@ export default {
             loadingTable: false,
             modalConfirm: false,
             modalFormUser: false,
+            toast: useToast(),
             modalForm: {
                 id: '',
                 name: '',
@@ -89,6 +94,7 @@ export default {
             },
             rowData: {},
             userData: [],
+            errors: [],
             columnsTable: [
                 { label: '#', field: 'id' },
                 { label: 'Nama', field: 'name' },
@@ -100,6 +106,11 @@ export default {
     },
     mounted() {
         this.getUsers();
+    },
+    computed: {
+        isPasswordMatch() {
+            return this.modalForm.password === this.modalForm.password_confirmation
+        }
     },
     methods: {
         confirmDelete(row) {
@@ -118,6 +129,10 @@ export default {
             }
         },
         submitData() {
+            //validate
+            if (!this.validateForm()) {
+                return this.toast.error('Please fill all required fields')
+            }
             this.loadingTable = true
             let dispatch = ''
             let data = {}
@@ -181,6 +196,25 @@ export default {
                 password: '',
                 password_confirmation: ''
             }
+        },
+        validateForm() {
+            this.errors = []
+            if (!this.modalForm.email) {
+                this.errors.push('Email is required')
+            }
+            if (!this.modalForm.password) {
+                this.errors.push('Password is required')
+            }
+            if (!this.modalForm.name) {
+                this.errors.push('Name is required')
+            }
+            if (!this.modalForm.telepon) {
+                this.errors.push('Phone is required')
+            }
+            if (this.errors.length > 0) {
+                return false
+            }
+            return true
         }
     }
 }
