@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Jobs\InsertMassUser;
 use App\Jobs\SendBatchVerifyEmail;
+use App\Jobs\SendVerifyEmail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -43,6 +44,7 @@ class UserController extends Controller
             'telepon' => $request->telepon,
             'password' => bcrypt($request->password),
         ]);
+        SendVerifyEmail::dispatch($userData->id);
         activity()
             ->causedBy(Auth::user())
             ->event('CREATE')

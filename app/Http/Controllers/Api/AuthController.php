@@ -34,12 +34,9 @@ class AuthController extends Controller
         $userController = new UserController();
         $data = $userController->store($request);
         $data = $data->original;
-        if ($data['status'] == true) {
-            $user = $data['data'];
-            SendVerifyEmail::dispatch($user->id);
-        }
+        $user = $data['data'];
         activity()->performedOn($user)
-            ->causedBy($user)
+            ->causedBy(Auth::user())
             ->event('CREATE')
             ->log('register new account');
         return $data;
