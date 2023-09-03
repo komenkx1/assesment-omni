@@ -57,6 +57,9 @@ class AuthController extends Controller
             return $this->responseMessage([], false, 'Invalid credentials');
         }
         $user = User::find(Auth::user()->id);
+        if (!$user->hasVerifiedEmail()) {
+            return $this->responseMessage([], false, 'Email is not verified');
+        }
         $token = $user->createToken('auth');
 
         activity()->performedOn($user)
