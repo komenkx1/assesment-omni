@@ -85,7 +85,6 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id, //ignore email user yang sedang login
             'telepon' => 'required|unique:users,telepon,' . $user->id, //ignore telepon user yang sedang login
-            'password' => 'required|min:6',
         ]);
 
         $userData = $user->update([
