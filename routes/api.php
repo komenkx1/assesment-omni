@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('user', UserController::class);
     Route::post('user/batch-insert', [UserController::class, 'batchInsert']);
     Route::get('/get-auth-user', [AuthController::class, 'getUser']);
+    Route::get('/get-log', [LogController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
 });

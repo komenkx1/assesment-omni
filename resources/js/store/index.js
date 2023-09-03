@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 import main from './modules/main'
 import auth from './modules/auth'
 import user from './modules/user'
+import log from './modules/log'
 
 const state = {
   state: {},
@@ -11,7 +12,8 @@ const state = {
   modules: {
     main,
     auth,
-    user
+    user,
+    log
   }
 }
 

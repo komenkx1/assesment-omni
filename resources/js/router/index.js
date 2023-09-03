@@ -6,12 +6,14 @@ import store from '../store'
 const Index = () => import('../pages/index.vue')
 const LoginPage = () => import('../pages/login.vue')
 const RegisterPage = () => import('../pages/signup.vue')
+const Log = () => import('../pages/log.vue')
 
 
 const routes = [
   { path: '/', name: 'index', component: Index },
   { path: '/login', name: 'login', component: LoginPage },
   { path: '/register', name: 'register', component: RegisterPage },
+  { path: '/log', name: 'log', component: Log },
 ]
 
 const router = createRouter({
