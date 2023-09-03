@@ -13,9 +13,10 @@
 - php artisan serve
 
 <!-- buat notes -->
-> Note: untuk menjalankan queue, jalankan perintah `php artisan queue:work` di terminal
-> Note: untuk menjalankan email send, setting SMTP di .env dan jalankan perintah `php artisan queue:work` di terminal
-> bentuk array batch user insert API adalah sebagai berikut:
+> Note: 
+- untuk menjalankan queue, jalankan perintah `php artisan queue:work` di terminal
+- untuk menjalankan email send, setting SMTP di .env dan jalankan perintah `php artisan queue:work` di terminal
+- bentuk array batch user insert API adalah sebagai berikut:
 ```php
 {
     "data": [
@@ -36,7 +37,7 @@
             "email": "roseshannon@isologia.com",
             "telepon": "(953) 539-3399",
             "password": "password"
-        },
+        }
     ]
 }
 ```
