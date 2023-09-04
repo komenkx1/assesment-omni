@@ -11,10 +11,12 @@
 - npm install
 - npm run dev
 - php artisan serve
+- run unitest
 
 <!-- buat notes -->
 > Note: 
 - untuk menjalankan queue, jalankan perintah `php artisan queue:work` di terminal
+- api untuk mass insert user `api/user/batch-insert`
 - untuk menjalankan email send, setting SMTP di .env dan jalankan perintah `php artisan queue:work` di terminal
 - bentuk array batch user insert API adalah sebagai berikut:
 ```php
